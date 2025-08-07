@@ -65,8 +65,7 @@ securityContext:
 service:
   type: LoadBalancer
   annotations: {}
-  # Optional: specify a specific IP from your MetalLB pool
-  # loadBalancerIP: "192.168.1.242"
+  loadBalancerIP: "192.168.29.242"
 
 ingress:
   enabled: false
@@ -87,21 +86,21 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-# livenessProbe:
-#   enabled: true
-#   initialDelaySeconds: 30
-#   periodSeconds: 30
-#   timeoutSeconds: 5
-#   failureThreshold: 3
-#   successThreshold: 1
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
 
-# readinessProbe:
-#   enabled: true
-#   initialDelaySeconds: 5
-#   periodSeconds: 10
-#   timeoutSeconds: 5
-#   failureThreshold: 3
-#   successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
 
 autoscaling:
   enabled: false
