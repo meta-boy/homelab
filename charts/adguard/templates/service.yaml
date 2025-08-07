@@ -26,7 +26,7 @@ spec:
     # Web interface ports
     {{- range .Values.service.ports }}
     - port: {{ .port }}
-      targetPort: {{ .targetPort }}
+      targetPort: {{ .port }}
       protocol: {{ .protocol | default "TCP" }}
       name: {{ .name }}
     {{- end }}
