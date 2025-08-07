@@ -96,10 +96,22 @@ resources:
     memory: 128Mi
 
 
-livenessProbe: {}
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
 
 
-readinessProbe: {}
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
 
 autoscaling:
   enabled: false
