@@ -24,13 +24,11 @@ spec:
       protocol: TCP
       name: dns-tcp
     # Web interface ports
-    - port: 80
-      targetPort: web
-      protocol: TCP
-      name: web
-    - port: 3000
-      targetPort: setup
-      protocol: TCP
-      name: setup
+    {{- range .Values.service.ports }}
+    - port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      protocol: {{ .protocol | default "TCP" }}
+      name: {{ .name }}
+    {{- end }}
   selector:
     {{- include "adguard.selectorLabels" . | nindent 4 }}
