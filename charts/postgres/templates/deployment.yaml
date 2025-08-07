@@ -49,11 +49,16 @@ spec:
               value: {{ .Values.postgresql.database }}
             - name: POSTGRES_USER
               value: {{ .Values.postgresql.username }}
+            {{- if .Values.auth.fromEnv.enabled }}
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_PASSWORD
+                  name: {{ .Values.auth.envSecret.name }}
+                  key: {{ .Values.auth.fromEnv.passwordEnvVar }}
+            {{- else }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgresPassword }}
+            {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
