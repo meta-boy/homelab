@@ -65,6 +65,15 @@ securityContext:
 service:
   type: LoadBalancer
   annotations: {}
+  ports:
+  - name: dashboard
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: setup
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
   loadBalancerIP: "192.168.29.242"
 
 ingress:
