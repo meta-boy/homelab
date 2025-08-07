@@ -1,52 +1,36 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "adguard.fullname" . }}-dns
+  name: {{ include "adguard.fullname" . }}
   labels:
     {{- include "adguard.labels" . | nindent 4 }}
-    service-type: dns
   {{- with .Values.service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.dnsLoadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.dnsLoadBalancerIP }}
+  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - port: {{ .Values.service.dns.port }}
+    # DNS ports
+    - port: 53
       targetPort: dns-udp
-      protocol: {{ .Values.service.dns.protocol }}
+      protocol: UDP
       name: dns-udp
-    - port: {{ .Values.service.dns.port }}
+    - port: 53
       targetPort: dns-tcp
       protocol: TCP
       name: dns-tcp
-  selector:
-    {{- include "adguard.selectorLabels" . | nindent 4 }}
----
-# Web Interface Service (HTTP)
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "adguard.fullname" . }}-web
-  labels:
-    {{- include "adguard.labels" . | nindent 4 }}
-    service-type: web
-  {{- with .Values.service.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-spec:
-  type: {{ .Values.service.type }}
-  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.webLoadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.webLoadBalancerIP }}
-  {{- end }}
-  ports:
-    - port: {{ .Values.service.web.port }}
+    # Web interface ports
+    - port: 80
       targetPort: web
       protocol: TCP
       name: web
+    - port: 3000
+      targetPort: setup
+      protocol: TCP
+      name: setup
   selector:
     {{- include "adguard.selectorLabels" . | nindent 4 }}

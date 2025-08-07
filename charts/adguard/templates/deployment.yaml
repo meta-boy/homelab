@@ -46,6 +46,9 @@ spec:
             - name: web
               containerPort: 80
               protocol: TCP
+            - name: setup
+              containerPort: 3000
+              protocol: TCP
           env:
             {{- if .Values.adguard.auth.fromEnv.enabled }}
             # Load password from environment secret
