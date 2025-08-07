@@ -1,0 +1,122 @@
+replicaCount: 1
+
+image:
+  repository: adguard/adguardhome
+  pullPolicy: IfNotPresent
+  tag: "v0.107.52"
+
+adguard:
+  # Admin username
+  username: "admin"
+  
+  # Environment-based secret configuration
+  auth:
+    fromEnv:
+      enabled: true
+      passwordEnvVar: "ADGUARD_PASSWORD"
+    envSecret:
+      name: "adguard-env-secret-prod"
+      create: false  # Using external secrets
+
+# Persistence configuration
+persistence:
+  work:
+    enabled: true
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: 1Gi  
+    annotations: {}
+  conf:
+    enabled: true
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: 100Mi 
+    annotations: {}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: false  # AdGuard needs to bind to privileged ports
+  fsGroup: 997
+
+securityContext:
+  runAsUser: 0  # Run as root for initial setup and privileged port binding
+  runAsGroup: 0
+  allowPrivilegeEscalation: true
+  capabilities:
+    add:
+      - NET_BIND_SERVICE  # Allow binding to privileged ports (53)
+      - CHOWN             # Allow changing file ownership
+      - SETUID            # Allow changing user ID
+      - SETGID            # Allow changing group ID
+
+# Service configuration for LoadBalancer
+service:
+  type: LoadBalancer
+  # DNS ports
+  dns:
+    port: 53
+    protocol: UDP
+  # Admin web interface
+  web:
+    port: 80
+  annotations: {}
+  # Optional: specify specific IPs from your MetalLB pool
+  # dnsLoadBalancerIP: "192.168.1.242"      # For DNS service
+  # webLoadBalancerIP: "192.168.1.243"      # For Web interface
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: adguard.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+autoscaling:
+  enabled: false
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
