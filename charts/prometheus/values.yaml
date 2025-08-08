@@ -161,7 +161,8 @@ config:
     
     - job_name: 'pushgateway'
       static_configs:
-        - targets: ['prometheus-pushgateway:9091']
+        - targets: ['pushgateway:9091']
+      honor_labels: true
 
 # Persistence configuration
 persistence:
