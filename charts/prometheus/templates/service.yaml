@@ -4,8 +4,15 @@ metadata:
   name: {{ include "prometheus.fullname" . }}
   labels:
     {{- include "prometheus.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.service.annotations }}
+    {{- toYaml .Values.service.annotations | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
@@ -13,10 +20,3 @@ spec:
       name: http
   selector:
     {{- include "prometheus.selectorLabels" . | nindent 4 }}
-  {{- if .Values.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
-  {{- end }}
-  {{- with .Values.service.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
