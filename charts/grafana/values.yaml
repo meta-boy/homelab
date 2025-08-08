@@ -59,6 +59,7 @@ service:
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "3000"
+    metallb.universe.tf/allow-shared-ip: "monitoring-shared"
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:

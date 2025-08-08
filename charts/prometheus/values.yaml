@@ -200,6 +200,7 @@ service:
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9090"
+    metallb.universe.tf/allow-shared-ip: "monitoring-shared"
 
 ingress:
   enabled: false

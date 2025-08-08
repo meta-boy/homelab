@@ -60,6 +60,7 @@ service:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9091"
     prometheus.io/path: "/metrics"
+    metallb.universe.tf/allow-shared-ip: "monitoring-shared"
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
