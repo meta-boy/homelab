@@ -1,0 +1,32 @@
+{{- if .Values.grafana.datasources }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana.fullname" . }}-datasources
+  labels:
+    {{- include "grafana.labels" . | nindent 4 }}
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+    {{- range .Values.grafana.datasources }}
+    - name: {{ .name }}
+      type: {{ .type }}
+      url: {{ .url }}
+      access: {{ .access | default "proxy" }}
+      isDefault: {{ .isDefault | default false }}
+      {{- if .basicAuth }}
+      basicAuth: {{ .basicAuth }}
+      {{- end }}
+      {{- if .basicAuthUser }}
+      basicAuthUser: {{ .basicAuthUser }}
+      {{- end }}
+      {{- if .basicAuthPassword }}
+      basicAuthPassword: {{ .basicAuthPassword }}
+      {{- end }}
+      {{- if .jsonData }}
+      jsonData:
+        {{- toYaml .jsonData | nindent 8 }}
+      {{- end }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pushgateway-config
+  namespace: default
+data:
+  pushgateway.yml: |
+    # Example Pushgateway configuration
+    log:
+      level: info
+    storage:
+      path: /data
+      retention: 24h
