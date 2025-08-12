@@ -97,7 +97,7 @@ resources:
 
 
 livenessProbe:
-  enabled: true
+  enabled: false
   initialDelaySeconds: 30
   periodSeconds: 30
   timeoutSeconds: 5
@@ -106,7 +106,7 @@ livenessProbe:
 
 
 readinessProbe:
-  enabled: true
+  enabled: false
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 5
