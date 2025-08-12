@@ -256,7 +256,8 @@ rbac:
 volumes: []
 volumeMounts: []
 
-nodeSelector: {}
+nodeSelector:
+  nodepool: workers
 tolerations: []
 affinity: {}
 

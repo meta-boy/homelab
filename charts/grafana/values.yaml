@@ -131,7 +131,8 @@ volumeMounts: []
 #   mountPath: "/etc/foo"
 #   readOnly: true
 
-nodeSelector: {}
+nodeSelector:
+  nodepool: workers
 
 tolerations: []
 
