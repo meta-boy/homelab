@@ -2,6 +2,31 @@
 
 This repository contains Helm charts and manifests for deploying and managing homelab applications on Kubernetes.
 
+## Cluster Topology
+
+The Kubernetes cluster consists of 3 nodes:
+
+- **1xControl Plane (Master) Node**
+- **2xWorker Nodes**
+
+### Control Plane Node
+
+- **OS:** Debian-based (8.4.0 x86_64)
+- **Host Model:** A320M-S2H -CF
+- **Kernel:** 6.8.12-9-pve
+- **CPU:** AMD Ryzen 5 2600 (12 cores) @ 3.400GHz
+- **GPU:** AMD ATI Radeon RX 470/480/570/570X/580/580X/590
+- **Memory:** 32GB
+
+### Worker Nodes (2x)
+
+- **OS:** Debian-based (8.4.0 x86_64)
+- **Host Model:** 10VHA0050D ThinkCentre M715q
+- **Kernel:** 6.8.12-9-pve
+- **CPU:** AMD Ryzen 5 2400GE (8 cores) @ 3.200GHz
+- **GPU:** AMD ATI Radeon Vega Series / Radeon Vega Mobile Series
+- **Memory:** 16GB
+
 ## Structure
 - **applications/**: Standalone application manifests (YAML).
 - **charts/**: Helm charts for modular, reusable deployments.
