@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data
+  namespace: postgres
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  # The PVC will use the default storage class
+  # To ensure data is retained when PVC is deleted,
+  # make sure your storage class has reclaimPolicy: Retain
+  # or create a custom storage class with Retain policy
