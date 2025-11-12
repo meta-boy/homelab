@@ -26,6 +26,10 @@ spec:
           value: "http"
         - name: GENERIC_TIMEZONE
           value: "UTC"
+        - name: WEBHOOK_URL
+          value: "https://n8n.is-up-in.space/"
+        - name: N8N_HOST
+          value: "n8n.is-up-in.space"
         envFrom:
         - secretRef:
             name: n8n-secret
