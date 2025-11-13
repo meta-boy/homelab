@@ -3,11 +3,9 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-  - sealed-secret.yaml
   - pvc.yaml
   - registry-config.yaml
   - registry-deployment.yaml
   - registry-service.yaml
   - ui-deployment.yaml
   - ui-service.yaml
-  - ingress.yaml

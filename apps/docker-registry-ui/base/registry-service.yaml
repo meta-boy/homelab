@@ -6,11 +6,12 @@ metadata:
   labels:
     app: registry-server
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
-  - port: 5000
-    targetPort: 5000
-    protocol: TCP
-    name: http
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30500
+      protocol: TCP
+      name: http
   selector:
     app: registry-server

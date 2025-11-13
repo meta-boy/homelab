@@ -27,9 +27,6 @@ spec:
             - name: registry-config
               mountPath: /etc/docker/registry
               readOnly: true
-            - name: registry-auth
-              mountPath: /auth
-              readOnly: true
           resources:
             requests:
               memory: "256Mi"
@@ -56,6 +53,3 @@ spec:
         - name: registry-config
           configMap:
             name: registry-config
-        - name: registry-auth
-          secret:
-            secretName: registry-auth
