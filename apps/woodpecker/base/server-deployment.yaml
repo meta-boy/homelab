@@ -39,10 +39,37 @@ spec:
               name: woodpecker-secret
               key: admin-user
               optional: true
-        - name: WOODPECKER_GITEA
-          value: "false"
+        # GitHub Configuration
         - name: WOODPECKER_GITHUB
-          value: "false"
+          value: "true"
+        - name: WOODPECKER_GITHUB_CLIENT
+          valueFrom:
+            secretKeyRef:
+              name: woodpecker-secret
+              key: github-client
+        - name: WOODPECKER_GITHUB_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: woodpecker-secret
+              key: github-secret
+        # Alternative: Gitea Configuration (uncomment to use)
+        # - name: WOODPECKER_GITEA
+        #   value: "true"
+        # - name: WOODPECKER_GITEA_URL
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: woodpecker-secret
+        #       key: gitea-url
+        # - name: WOODPECKER_GITEA_CLIENT
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: woodpecker-secret
+        #       key: gitea-client
+        # - name: WOODPECKER_GITEA_SECRET
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: woodpecker-secret
+        #       key: gitea-secret
         volumeMounts:
         - name: woodpecker-data
           mountPath: /var/lib/woodpecker

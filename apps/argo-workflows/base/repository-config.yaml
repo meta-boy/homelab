@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repository-config
+  namespace: argo-workflows
+data:
+  # Repository configuration in YAML format
+  # Each repository can specify: url, branch, dockerfile path, image name, etc.
+  repositories.yaml: |
+    repositories:
+      # Example: Public repository
+      - name: nginx-example
+        repoUrl: https://github.com/nginxinc/docker-nginx.git
+        revision: master
+        contextPath: mainline/debian
+        dockerfilePath: Dockerfile
+        imageName: nginx
+        imageTag: custom
+        private: false
+        enabled: true
+
+      - name: dam-scripts
+        repoUrl: https://github.com/meta-boy/dam-scripts.git
+        revision: main
+        contextPath: .
+        dockerfilePath: Dockerfile
+        imageName: dam-scripts
+        imageTag: latest
+        private: true
+        enabled: true
+
+      # Example: Monorepo with multiple services
+      # - name: api-service
+      #   repoUrl: https://github.com/yourusername/monorepo.git
+      #   revision: main
+      #   contextPath: services/api
+      #   dockerfilePath: Dockerfile
+      #   imageName: api-service
+      #   imageTag: latest
+      #   private: true
+      #   enabled: true
+      #
+      # - name: web-frontend
+      #   repoUrl: https://github.com/yourusername/monorepo.git
+      #   revision: main
+      #   contextPath: services/web
+      #   dockerfilePath: Dockerfile
+      #   imageName: web-frontend
+      #   imageTag: latest
+      #   private: true
+      #   enabled: true
+
+      # Example: Specific branch or tag
+      # - name: my-app-dev
+      #   repoUrl: https://github.com/yourusername/myapp.git
+      #   revision: develop
+      #   contextPath: .
+      #   dockerfilePath: Dockerfile
+      #   imageName: myapp
+      #   imageTag: dev
+      #   private: false
+      #   enabled: true
+
+    # Global settings
+    settings:
+      # How often to check and build repositories (for CronWorkflow)
+      buildSchedule: "0 2 * * *"  # Daily at 2 AM
+
+      # Whether to build on every commit (requires webhook setup)
+      webhookEnabled: true
+
+      # Default registry settings (can be overridden per repo)
+      defaultRegistry: registry-server.docker-registry.svc.cluster.local:5000
+
+      # Workflow retention
+      ttlSecondsAfterSuccess: 3600    # 1 hour
+      ttlSecondsAfterFailure: 86400   # 24 hours

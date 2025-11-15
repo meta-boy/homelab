@@ -12,19 +12,40 @@ This deployment consists of:
 
 ### Prerequisites
 
-Before deploying, you need to configure the secret for agent communication:
+**IMPORTANT**: Woodpecker requires at least one Git forge to be configured before it can start.
 
-1. Generate a random agent secret:
+#### Step 1: Create GitHub OAuth Application
+
+1. Go to https://github.com/settings/developers
+2. Click "New OAuth App"
+3. Fill in the details:
+   - **Application name**: Woodpecker CI
+   - **Homepage URL**: https://woodpecker.is-up-in.space
+   - **Authorization callback URL**: https://woodpecker.is-up-in.space/authorize
+4. Click "Register application"
+5. Copy the **Client ID** and generate a **Client Secret**
+
+#### Step 2: Generate Agent Secret
+
 ```bash
 openssl rand -hex 32
 ```
 
-2. Update the `sealed-secret.yaml` file with the generated secret:
+#### Step 3: Update Secret Configuration
+
+Update `base/sealed-secret.yaml` with your credentials:
+
 ```yaml
-agent-secret: "YOUR_GENERATED_SECRET"
+stringData:
+  agent-secret: "YOUR_GENERATED_AGENT_SECRET"
+  github-client: "YOUR_GITHUB_CLIENT_ID"
+  github-secret: "YOUR_GITHUB_CLIENT_SECRET"
+  admin-user: "your-github-username"  # Optional: Makes you admin
 ```
 
-3. (Optional) If you want to seal the secret using sealed-secrets:
+#### Step 4: (Optional) Seal the Secret
+
+If using sealed-secrets:
 ```bash
 kubeseal --format=yaml < base/sealed-secret.yaml > base/sealed-secret-encrypted.yaml
 ```
@@ -59,33 +80,43 @@ The Woodpecker UI is accessible at: https://woodpecker.is-up-in.space
 - Uses Kubernetes backend for pipeline execution
 - RBAC configured to manage pods and PVCs in the woodpecker namespace
 
-## Forge Integration
+## Switching to a Different Forge
 
-To connect Woodpecker with your Git forge (GitHub, GitLab, Gitea, etc.), you need to:
+The deployment is pre-configured for GitHub. To use a different forge:
 
-1. Create an OAuth application in your forge
-2. Update the server deployment with forge-specific environment variables:
+### Using Gitea
 
-For GitHub:
+1. Create an OAuth2 application in your Gitea instance:
+   - Go to Settings → Applications → Manage OAuth2 Applications
+   - Redirect URI: `https://woodpecker.is-up-in.space/authorize`
+
+2. Comment out GitHub configuration in `base/server-deployment.yaml` and uncomment Gitea lines
+
+3. Update `base/sealed-secret.yaml`:
+   ```yaml
+   gitea-url: "https://gitea.example.com"
+   gitea-client: "YOUR_GITEA_CLIENT_ID"
+   gitea-secret: "YOUR_GITEA_CLIENT_SECRET"
+   ```
+
+### Using GitLab
+
+Add to `base/server-deployment.yaml`:
 ```yaml
-- name: WOODPECKER_GITHUB
+- name: WOODPECKER_GITLAB
   value: "true"
-- name: WOODPECKER_GITHUB_CLIENT
-  value: "your-client-id"
-- name: WOODPECKER_GITHUB_SECRET
-  value: "your-client-secret"
-```
-
-For Gitea:
-```yaml
-- name: WOODPECKER_GITEA
-  value: "true"
-- name: WOODPECKER_GITEA_URL
-  value: "https://gitea.example.com"
-- name: WOODPECKER_GITEA_CLIENT
-  value: "your-client-id"
-- name: WOODPECKER_GITEA_SECRET
-  value: "your-client-secret"
+- name: WOODPECKER_GITLAB_URL
+  value: "https://gitlab.com"
+- name: WOODPECKER_GITLAB_CLIENT
+  valueFrom:
+    secretKeyRef:
+      name: woodpecker-secret
+      key: gitlab-client
+- name: WOODPECKER_GITLAB_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: woodpecker-secret
+      key: gitlab-secret
 ```
 
 ## Resources
