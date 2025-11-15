@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: temporal
+  namespace: temporal
+spec:
+  serviceName: temporal
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+    spec:
+      containers:
+      - name: temporal
+        image: temporalio/auto-setup:1.22.4
+        ports:
+        - containerPort: 7233
+          name: frontend
+          protocol: TCP
+        - containerPort: 7234
+          name: history
+          protocol: TCP
+        - containerPort: 7235
+          name: matching
+          protocol: TCP
+        - containerPort: 7239
+          name: worker
+          protocol: TCP
+        env:
+        - name: TEMPORAL_ADDRESS
+          value: "temporal:7233"
+        - name: TEMPORAL_CLI_ADDRESS
+          value: "temporal:7233"
+        envFrom:
+        - secretRef:
+            name: temporal-secret
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        livenessProbe:
+          tcpSocket:
+            port: 7233
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          tcpSocket:
+            port: 7233
+          initialDelaySeconds: 30
+          periodSeconds: 10

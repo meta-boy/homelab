@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: savitri-scripts
+  namespace: dam-scripts
+data:
+  __init__.py: |
+    """
+    Savitri DAM scripts package.
+    Contains workflows and activities for water level and metro weather OCR.
+    """
+  metro_ocr_flow.py: |
+    # This file will be populated from the dam-scripts/savitri/metro_ocr_flow.py
+    # NOTE: You need to update this ConfigMap with the actual file content
+    # Run: kubectl create configmap savitri-scripts --from-file=savitri/ -n dam-scripts --dry-run=client -o yaml > configmap.yaml
+  water_level_flow.py: |
+    # This file will be populated from the dam-scripts/savitri/water_level_flow.py
+    # NOTE: You need to update this ConfigMap with the actual file content
+    # Run: kubectl create configmap savitri-scripts --from-file=savitri/ -n dam-scripts --dry-run=client -o yaml > configmap.yaml

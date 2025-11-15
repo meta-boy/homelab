@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dam-scripts-worker
+  namespace: dam-scripts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dam-scripts-worker
+  template:
+    metadata:
+      labels:
+        app: dam-scripts-worker
+    spec:
+      containers:
+      - name: worker
+        image: registry-server.docker-registry.svc.cluster.local:5000/dam-scripts:latest
+        env:
+        - name: TEMPORAL_ADDRESS
+          value: "temporal.temporal.svc.cluster.local:7233"
+        - name: TEMPORAL_TASK_QUEUE
+          value: "dam-scripts-queue"
+        envFrom:
+        - secretRef:
+            name: dam-scripts-secret
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        - name: ocr-images
+          mountPath: /app/ocr_images
+        - name: savitri-scripts
+          mountPath: /app/savitri
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - "import sys; sys.exit(0)"
+          initialDelaySeconds: 30
+          periodSeconds: 60
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: dam-scripts-logs
+      - name: ocr-images
+        persistentVolumeClaim:
+          claimName: dam-scripts-ocr-images
+      - name: savitri-scripts
+        configMap:
+          name: savitri-scripts
