@@ -40,6 +40,18 @@ spec:
               value: "10G"
             - name: WOODPECKER_BACKEND_K8S_STORAGE_RWX
               value: "false"
+            # FIX: Configure pipeline pods to work with insecure registries
+            - name: WOODPECKER_BACKEND_K8S_SECCTX_NONROOT
+              value: "false"
+            # Set default resources for pipeline pods (buildah needs more memory)
+            - name: WOODPECKER_BACKEND_K8S_POD_RESOURCES_LIMITS_MEMORY
+              value: "2Gi"
+            - name: WOODPECKER_BACKEND_K8S_POD_RESOURCES_LIMITS_CPU
+              value: "2000m"
+            - name: WOODPECKER_BACKEND_K8S_POD_RESOURCES_REQUESTS_MEMORY
+              value: "1Gi"
+            - name: WOODPECKER_BACKEND_K8S_POD_RESOURCES_REQUESTS_CPU
+              value: "500m"
           resources:
             requests:
               memory: "128Mi"
