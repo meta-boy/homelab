@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: woodpecker-server
+  namespace: woodpecker
+  labels:
+    app: woodpecker-server
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  - port: 9000
+    targetPort: 9000
+    protocol: TCP
+    name: grpc
+  selector:
+    app: woodpecker-server

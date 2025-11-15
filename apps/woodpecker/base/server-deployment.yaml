@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: woodpecker-server
+  namespace: woodpecker
+  labels:
+    app: woodpecker-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: woodpecker-server
+  template:
+    metadata:
+      labels:
+        app: woodpecker-server
+    spec:
+      containers:
+      - name: woodpecker-server
+        image: woodpeckerci/woodpecker-server:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9000
+          name: grpc
+        env:
+        - name: WOODPECKER_HOST
+          value: "https://woodpecker.is-up-in.space"
+        - name: WOODPECKER_AGENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: woodpecker-secret
+              key: agent-secret
+        - name: WOODPECKER_OPEN
+          value: "true"
+        - name: WOODPECKER_ADMIN
+          valueFrom:
+            secretKeyRef:
+              name: woodpecker-secret
+              key: admin-user
+              optional: true
+        - name: WOODPECKER_GITEA
+          value: "false"
+        - name: WOODPECKER_GITHUB
+          value: "false"
+        volumeMounts:
+        - name: woodpecker-data
+          mountPath: /var/lib/woodpecker
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: woodpecker-data
+        persistentVolumeClaim:
+          claimName: woodpecker-server-data
