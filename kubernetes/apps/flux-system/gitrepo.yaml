@@ -7,6 +7,5 @@ metadata:
 spec:
   interval: 1m
   url: https://github.com/meta-boy/homelab
-  branch: main
   ref:
     branch: main
