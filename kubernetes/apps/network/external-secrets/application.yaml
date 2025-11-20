@@ -13,7 +13,7 @@ spec:
     helm:
       parameters:
       - name: installCRDs
-        value: "false"
+        value: "true"
   destination:
     server: https://kubernetes.default.svc
     namespace: network
@@ -24,8 +24,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-    resourceExclusions:
-      - apiGroups:
-          - apiextensions.k8s.io
-        kinds:
-          - CustomResourceDefinition
