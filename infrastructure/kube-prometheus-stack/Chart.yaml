@@ -1,0 +1,11 @@
+apiVersion: v2
+name: kube-prometheus-stack
+description: Prometheus monitoring stack for homelab
+type: application
+version: 1.0.0
+appVersion: "0.77.2"
+
+dependencies:
+  - name: kube-prometheus-stack
+    version: 65.8.1
+    repository: https://prometheus-community.github.io/helm-charts

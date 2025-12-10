@@ -1,0 +1,11 @@
+apiVersion: v2
+name: external-secrets
+description: External Secrets Operator for homelab
+type: application
+version: 1.0.0
+appVersion: "0.10.7"
+
+dependencies:
+  - name: external-secrets
+    version: 0.10.7
+    repository: https://charts.external-secrets.io
