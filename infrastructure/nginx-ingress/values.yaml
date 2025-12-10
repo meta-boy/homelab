@@ -1,0 +1,33 @@
+ingress-nginx:
+  controller:
+    kind: DaemonSet
+
+    service:
+      type: ClusterIP
+      externalTrafficPolicy: ""
+
+    hostNetwork: false
+
+    config:
+      use-forwarded-headers: "true"
+      compute-full-forwarded-for: "true"
+      use-proxy-protocol: "false"
+
+    ingressClassResource:
+      name: nginx
+      enabled: true
+      default: true
+      controllerValue: "k8s.io/ingress-nginx"
+
+    admissionWebhooks:
+      enabled: true
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: false
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 90Mi
