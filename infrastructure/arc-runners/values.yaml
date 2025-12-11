@@ -1,0 +1,41 @@
+gha-runner-scale-set:
+  # GitHub repository URL
+  githubConfigUrl: "https://github.com/meta-boy/homelab"
+
+  # Reference the secret created by ExternalSecret
+  githubConfigSecret: github-arc-token
+
+  # Runner label - use "homelab" in runs-on
+  runnerScaleSetName: "homelab"
+
+  # Scaling configuration
+  minRunners: 0
+  maxRunners: 3
+
+  # Controller service account reference
+  controllerServiceAccount:
+    namespace: arc-system
+    name: actions-runner-controller-gha-runner-scale-set-controller
+
+  # Runner pod template
+  template:
+    spec:
+      containers:
+        - name: runner
+          image: ghcr.io/actions/actions-runner:latest
+          command: ["/home/runner/run.sh"]
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
