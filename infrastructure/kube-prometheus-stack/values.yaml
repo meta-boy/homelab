@@ -1,4 +1,8 @@
 kube-prometheus-stack:
+  # Skip CRDs - managed manually with server-side apply to avoid annotation size errors
+  crds:
+    enabled: false
+
   # Grafana Configuration
   grafana:
     enabled: true
