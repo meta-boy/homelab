@@ -3,8 +3,8 @@ ingress-nginx:
     kind: DaemonSet
 
     service:
-      type: ClusterIP
-      externalTrafficPolicy: ""
+      type: LoadBalancer
+      externalTrafficPolicy: Local
 
     hostNetwork: false
 
