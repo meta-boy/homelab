@@ -1,0 +1,17 @@
+name: Test Homelab Runner
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  test:
+    runs-on: homelab  # <-- points to local homelab runner
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test
+        run: |
+          echo "Running on homelab ARC runner!"
+          uname -a
+          kubectl version --client || true
