@@ -1,0 +1,53 @@
+image:
+  repository: n8nio/n8n
+  tag: "1.70.3"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 5678
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  host: n8n.is-up-in.space
+
+n8n:
+  host: n8n.is-up-in.space
+  protocol: https
+  webhookUrl: https://n8n.is-up-in.space
+
+database:
+  type: postgresdb
+  host: postgres.database.svc.cluster.local
+  port: 5432
+  name: n8n
+  user: postgres
+  password: changeme
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
