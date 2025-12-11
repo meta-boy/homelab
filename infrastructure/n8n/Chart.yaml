@@ -2,4 +2,4 @@ apiVersion: v2
 name: n8n
 description: n8n workflow automation
 version: 0.1.0
-appVersion: "2.0.0-beta"
+appVersion: "2.0.0"
