@@ -9,53 +9,34 @@ theme:
 
 pages:
   - name: Home
+    width: slim
     columns:
-      - size: full
-        widgets:
-          - type: calendar
-
-          - type: weather
-            location: San Francisco, California, United States
-
-          - type: bookmarks
-            groups:
-              - title: General
-                links:
-                  - title: GitHub
-                    url: https://github.com
-                  - title: Gmail
-                    url: https://gmail.com
-
-          - type: rss
-            limit: 10
-            collapse-after: 3
-            cache: 3h
-            feeds:
-              - url: https://blog.rust-lang.org/feed.xml
-                title: Rust Blog
-              - url: https://www.theverge.com/rss/index.xml
-                title: The Verge
-
-  - name: Monitoring
-    columns:
-      - size: full
-        widgets:
-          - type: monitor
-            cache: 1m
-            sites:
-              - title: GitHub
-                url: https://github.com
-                icon: si:github
-              - title: Google
-                url: https://google.com
-                icon: si:google
-
       - size: small
         widgets:
-          - type: clock
-            hour-format: 24h
-            timezones:
-              - timezone: America/Los_Angeles
-                label: PST
-              - timezone: UTC
-                label: UTC
+          - type: calendar
+            first-day-of-week: monday
+
+          - type: weather
+            location: Mumbai, India
+            units: metric
+            hour-format: 12h
+
+      - size: full
+        widgets:
+          - type: reddit
+            subreddit: technology
+            style: vertical-list
+            limit: 8
+            sort-by: hot
+            collapse-after: 4
+            show-thumbnails: true
+            show-flairs: true
+
+          - type: reddit
+            subreddit: selfhosted
+            style: vertical-list
+            limit: 8
+            sort-by: hot
+            collapse-after: 4
+            show-thumbnails: true
+            show-flairs: true
