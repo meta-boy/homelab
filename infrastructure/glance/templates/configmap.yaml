@@ -18,6 +18,7 @@ data:
     pages:
       - name: Home
         width: slim
+        hide-desktop-navigation: true
         columns:
           - size: small
             widgets:
