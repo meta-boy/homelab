@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+  labels:
+    app: {{ .Chart.Name }}
+data:
+  glance.yml: |
+    server:
+      port: 8080
+
+    theme:
+      light: false
+      background-color: 240 13 14
+      primary-color: 43 100 50
+      contrast-multiplier: 1.1
+
+    pages:
+      - name: Home
+        columns:
+          - size: full
+            widgets:
+              - type: calendar
+
+              - type: weather
+                location: San Francisco, California, United States
+
+              - type: bookmarks
+                groups:
+                  - title: General
+                    links:
+                      - title: GitHub
+                        url: https://github.com
+                      - title: Gmail
+                        url: https://gmail.com
+
+              - type: rss
+                limit: 10
+                collapse-after: 3
+                cache: 3h
+                feeds:
+                  - url: https://blog.rust-lang.org/feed.xml
+                    title: Rust Blog
+                  - url: https://www.theverge.com/rss/index.xml
+                    title: The Verge
